@@ -1,14 +1,14 @@
-program amip_forcing
+program iceberg
 
     use config_mod
-    use amip_forcing_mod
+    use iceberg_mod
     use cplng
 
     implicit none
 
     integer ::      RunLengthSec, TimeStepSec
-    integer ::      StartYear, StartMonth, StartDay, FixYear
-    namelist /NAMAMIP/ RunLengthSec, TimeStepSec, StartYear, StartMonth, StartDay, FixYear, FileListSST, FileListSIC, LDebug, LInterpolate
+    integer ::      StartYear, StartMonth, StartDay
+    namelist /NAMICEBERG/ RunLengthSec, TimeStepSec, StartYear, StartMonth, StartDay, FixYear, FileListSST, FileListSIC, LDebug, LInterpolate
 
     integer :: time
     logical :: LUNnotFree
@@ -19,7 +19,7 @@ program amip_forcing
     FixYear=0
 
     ! open logfile
-    open(LOGLUN,file='amip.log',status='NEW')
+    open(LOGLUN,file='iceberg.log',status='NEW')
 
     call cplng_init
     call cplng_config
@@ -29,41 +29,28 @@ program amip_forcing
     inquire(NAMLUN,opened=LUNnotFree)
     if (LUNnotFree) call ERROR('Namelist LUN not free')
     open(NAMLUN,file=NamelistFileName,status='OLD')
-    read(NAMLUN,nml=NAMAMIP)
+    read(NAMLUN,nml=NAMICEBERG)
     close(NAMLUN)
 
-    ! FixYear>0 sets a perpetual forcing for year FixYear
-    ! This fix works properly as long as a chunk of the simulation
-    ! is not longer than 1 year
-    if ( FixYear <= 0 ) then
-        call setup_amip_forcing(StartYear,StartMonth,StartDay,TimeStepSec)
-    else
-        call error('FixYear not implemented yet - stopping')
-    endif
+    call setup_iceberg(StartYear,StartMonth,StartDay,TimeStepSec)
 
     ! Time loop
     ! Note that according to OASIS convention, the first time step is at time=0
     ! and the last one is at runlength-timestep (see OASIS documentation)
     do time=0,RunLengthSec-TimeStepSec,TimeStepSec
 
-       ! Currently nothing (no signal) is received from the atmosphere.
-       ! This could potentially lead to problems in the case of very long
-       ! runs with high resolution, in that case a buffer (Oasis?) will hold
-       ! hold a large amount of data from the AMIP_READER that haven't been
-       ! fetched by the atmopshere model yet.
-       !
-       ! call cplng_exchange(time,cplng_stage_rcv_atm)
+        call cplng_exchange(time,cplng_stage_rcv_oce)
 
-        call update_sst_and_sic
+        call update_position_melt
 
-        call cplng_exchange(time,cplng_stage_snd_atm)
+       ! call cplng_exchange(time,cplng_stage_snd_oce)
 
     enddo
 
-    call finalise_amip_forcing
+    call finalise_iceberg
 
     call cplng_finalize
 
     close(LOGLUN)
 
-end program amip_forcing
+end program iceberg

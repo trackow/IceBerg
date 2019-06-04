@@ -1,4 +1,4 @@
-module amip_forcing_mod
+module iceberg_mod
 
     use config_mod
     use NetCDF
@@ -7,16 +7,24 @@ module amip_forcing_mod
 
     private
 
-    public setup_amip_forcing
+    public setup_iceberg
     public update_sst_and_sic
-    public finalise_amip_forcing
+    public finalise_iceberg
 
-    real(RNP),pointer     :: AMIP_sst(:,:)
-    real(RNP),pointer     :: AMIP_sic(:,:)
+    real(RNP),pointer     :: iceberg_sst(:,:)
+    real(RNP),pointer     :: iceberg_sic(:,:)
+    real(RNP),pointer     :: iceberg_ssh(:,:)
+    real(RNP),pointer     :: iceberg_u_oce(:,:)
+    real(RNP),pointer     :: iceberg_v_oce(:,:)
+    real(RNP),pointer     :: iceberg_u_atm(:,:)
+    real(RNP),pointer     :: iceberg_v_atm(:,:)
+    real(RNP),pointer     :: iceberg_u_ice(:,:)
+    real(RNP),pointer     :: iceberg_v_ice(:,:)
+    real(RNP),pointer     :: iceberg_melt(:,:)
 
     real(kind=8) :: deltaT
 
-    integer :: ifile,ncid_sst,varid_sst,ncid_sic,varid_sic
+    integer :: ifile,ncid_sst,varid_sst,ncid_sic,varid_sic,ncid_ssh,varid_ssh
     integer :: t_index,old_t_index
 
     ! keep precision of variables in the netcdf files here
@@ -32,14 +40,23 @@ module amip_forcing_mod
 
 contains
 
-    subroutine setup_amip_forcing(yy,mm,dd,dtime)
+    subroutine setup_iceberg(yy,mm,dd,dtime)
 
         use CPLNG
 
         integer, intent(in) :: yy,mm,dd,dtime
 
-        AMIP_sst  => CPLNG_FLD(CPLNG_IDX('AMIP_sst'))%D
-        AMIP_sic  => CPLNG_FLD(CPLNG_IDX('AMIP_sic'))%D
+        iceberg_sst      => CPLNG_FLD(CPLNG_IDX('iceberg_sst'))%D
+        iceberg_sic      => CPLNG_FLD(CPLNG_IDX('iceberg_sic'))%D
+        iceberg_ssh      => CPLNG_FLD(CPLNG_IDX('iceberg_ssh'))%D
+        iceberg_u_oce    => CPLNG_FLD(CPLNG_IDX('iceberg_u_oce'))%D
+        iceberg_v_oce    => CPLNG_FLD(CPLNG_IDX('iceberg_v_oce'))%D
+        iceberg_u_atm    => CPLNG_FLD(CPLNG_IDX('iceberg_u_atm'))%D
+        iceberg_v_atm    => CPLNG_FLD(CPLNG_IDX('iceberg_v_atm'))%D
+        iceberg_u_ice    => CPLNG_FLD(CPLNG_IDX('iceberg_u_ice'))%D
+        iceberg_v_ice    => CPLNG_FLD(CPLNG_IDX('iceberg_v_ice'))%D
+
+        iceberg_melt  => CPLNG_FLD(CPLNG_IDX('iceberg_melt'))%D
 
         deltaT=dtime/86400.
 
@@ -53,14 +70,14 @@ contains
         ifile=1
         lfirst=.true.
 
-    end subroutine setup_amip_forcing
+    end subroutine setup_iceberg
 
 
-    subroutine finalise_amip_forcing
+    subroutine finalise_iceberg
 
         call close_file(ifile)
 
-    end subroutine finalise_amip_forcing
+    end subroutine finalise_iceberg
 
 
     subroutine days_since_refdate(yy,mm,dd,nd)
@@ -252,4 +269,4 @@ contains
     end subroutine nf90_chkerr
 
 
-end module amip_forcing_mod
+end module iceberg_mod
