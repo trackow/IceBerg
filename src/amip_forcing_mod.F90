@@ -24,7 +24,11 @@ module iceberg_mod
 
     real(kind=8) :: deltaT
 
-    integer :: ifile,ncid_sst,varid_sst,ncid_sic,varid_sic,ncid_ssh,varid_ssh
+    integer :: 	ifile, ncid_sst,varid_sst, ncid_sic,varid_sic, ncid_ssh,varid_ssh, &
+		ncid_u_oce,varid_u_oce, ncid_v_oce,varid_v_oce, &
+		ncid_u_atm,varid_u_atm, ncid_v_atm,varid_v_atm, &
+		ncid_u_ice,varid_u_ice, ncid_v_ice,varid_v_ice, &
+		ncid_melt,varid_melt 
     integer :: t_index,old_t_index
 
     ! keep precision of variables in the netcdf files here
@@ -34,7 +38,7 @@ module iceberg_mod
 
     real(kind=8) :: t,t1,t2
 
-    character (len=fname_length) :: fname_sst,fname_sic
+    character (len=fname_length) :: fname_sst,fname_sic,fname_ssh,fname_u_oce,fname_v_oce,fname_u_atm,fname_v_atm,fname_u_ice,fname_v_ice,fname_melt
 
     logical :: lfirst,file_found
 
@@ -109,7 +113,7 @@ contains
     end subroutine days_since_refdate
 
 
-    subroutine update_sst_and_sic
+    subroutine update_position_melt
 
         integer :: nn
 
