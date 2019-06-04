@@ -8,7 +8,7 @@ module config_mod
     ! compatible with OASIS double precision
     integer,parameter :: RNP = SELECTED_REAL_KIND(12,307)
 
-    character(len=*),parameter :: NamelistFileName  = "namelist.amip"
+    character(len=*),parameter :: NamelistFileName  = "namelist.iceberg"
 
     ! x and y (i and j) dimensions of the AMIP grid
     integer,parameter :: GridNX = 360
@@ -24,6 +24,14 @@ module config_mod
     integer,parameter :: fname_length=200
     character(len=fname_length) :: FileListSST(15)
     character(len=fname_length) :: FileListSIC(15)
+    character(len=fname_length) :: FileListSSH(15)
+    character(len=fname_length) :: FileListU_OCE(15)
+    character(len=fname_length) :: FileListU_ATM(15)
+    character(len=fname_length) :: FileListU_ICE(15)
+    character(len=fname_length) :: FileListV_OCE(15)
+    character(len=fname_length) :: FileListV_ATM(15)
+    character(len=fname_length) :: FileListV_ICE(15)
+    character(len=fname_length) :: FileListMELT(15)
 
     ! Switch for linera/nearest neighbour time interpolation
     logical :: LInterpolate
@@ -37,7 +45,7 @@ subroutine ERROR(msg)
     character(len=*),intent(in) :: msg
 
     write (*,'("*EE* ",A)') msg
-    stop 'Aborting AMIP forcing.'
+    stop 'Aborting IceBerg.'
 end subroutine ERROR
 
 end module config_mod

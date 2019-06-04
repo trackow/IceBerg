@@ -34,12 +34,22 @@ SUBROUTINE CPLNG_CONFIG
     ! -------------------------------------------------------------------------
     ! * (1) CONFIGURE COUPLING FIELDS
     ! -------------------------------------------------------------------------
-    ! Fields received by runoff mapper from the atmosphere
-!   CALL ADD_FLD('AMIP_time',OASIS_OUT,CPLNG_STAGE_RCV_ATM)
 
-    ! Fields sent by the runoff mapper to the ocean
-    CALL ADD_FLD('AMIP_sst',OASIS_OUT,CPLNG_STAGE_SND_ATM)
-    CALL ADD_FLD('AMIP_sic',OASIS_OUT,CPLNG_STAGE_SND_ATM)
+    ! Fields recieved by IceBerg coming from the ocean or atmosphere. Note that 
+    ! for the definition of stages it is not important if e.g. wind speed 
+    ! components are coming from the atmosphere or the from ocean model that is 
+    ! driven by atmosphere file input.
+    CALL ADD_FLD('iceberg_sst',OASIS_OUT,CPLNG_STAGE_REC)
+    CALL ADD_FLD('iceberg_ssi',OASIS_OUT,CPLNG_STAGE_REC)
+    CALL ADD_FLD('iceberg_ssh',OASIS_OUT,CPLNG_STAGE_REC)
+    CALL ADD_FLD('iceberg_u_oce',OASIS_OUT,CPLNG_STAGE_REC)
+    CALL ADD_FLD('iceberg_v_oce',OASIS_OUT,CPLNG_STAGE_REC)
+    CALL ADD_FLD('iceberg_u_atm',OASIS_OUT,CPLNG_STAGE_REC)
+    CALL ADD_FLD('iceberg_v_atm',OASIS_OUT,CPLNG_STAGE_REC)
+    CALL ADD_FLD('iceberg_u_ice',OASIS_OUT,CPLNG_STAGE_REC)
+    CALL ADD_FLD('iceberg_v_ice',OASIS_OUT,CPLNG_STAGE_REC)
+
+    CALL ADD_FLD('iceberg_melt',OASIS_OUT,CPLNG_STAGE_SǸD)
 
     ! -------------------------------------------------------------------------
     ! * (2) Provide array of coupling fields (CPLNG_FLD)
