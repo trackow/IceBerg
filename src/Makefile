@@ -1,4 +1,4 @@
-executable = ../bin/amip-forcing.exe
+executable = ../bin/iceberg.exe
 
 VPATH = cplng
 
@@ -10,13 +10,13 @@ cplng_srcs = \
     cplng_finalize_mod.F90 \
     cplng_mod.F90
 
-amipforc_srcs = amip_forcing_mod.F90 amip_forcing.F90
+iceberg_srcs = iceberg_modules.F90 iceberg_main.F90
 
-$(executable): config_mod.o $(cplng_srcs:.F90=.o) $(amipforc_srcs:.F90=.o)
-	$(OIFS_FC) $(OIFS_CFLAGS) -o $@ $^ $(OIFS_OASIS_LIB) $(OIFS_NETCDFF_LIB) $(OIFS_MPI_LIB)
+$(executable): iceberg_config.o $(cplng_srcs:.F90=.o) $(iceberg_srcs:.F90=.o)
+	$(ICEBERG_FC) $(ICEBERG_CFLAGS) -o $@ $^ $(ICEBERG_OASIS_LIB) $(ICEBERG_NETCDFF_LIB) $(ICEBERG_MPI_LIB)
 
 %.o: %.F90
-	$(OIFS_FC) $(OIFS_FFLAGS) -c $(OIFS_OASIS_INCLUDE) -I$(NETCDF_Fortran_INCLUDE_DIRECTORIES) $<
+	$(ICEBERG_FC) $(ICEBERG_FFLAGS) -c $(ICEBERG_OASIS_INCLUDE) -I$(ICEBERG_NETCDFFn_INC_DIR) $<
 
 .PHONY: clean
 clean:
