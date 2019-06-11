@@ -49,7 +49,7 @@ SUBROUTINE CPLNG_CONFIG
     CALL ADD_FLD('iceberg_u_ice',OASIS_OUT,CPLNG_STAGE_REC)
     CALL ADD_FLD('iceberg_v_ice',OASIS_OUT,CPLNG_STAGE_REC)
 
-    CALL ADD_FLD('iceberg_melt',OASIS_OUT,CPLNG_STAGE_SǸD)
+    CALL ADD_FLD('iceberg_melt',OASIS_OUT,CPLNG_STAGE_SND)
 
     ! -------------------------------------------------------------------------
     ! * (2) Provide array of coupling fields (CPLNG_FLD)
