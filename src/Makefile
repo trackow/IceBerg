@@ -13,7 +13,7 @@ cplng_srcs = \
 iceberg_srcs = iceberg_modules.F90 iceberg_main.F90
 
 $(executable): iceberg_config.o $(cplng_srcs:.F90=.o) $(iceberg_srcs:.F90=.o)
-	$(FC) -o $@ $^ $(ICEBERG_OASIS_LIB) -L${NETCDF_DIR}/lib -lnetcdff $(ICEBERG_MPI_LIB)
+	$(FC) -o $@ $^ $(ICEBERG_OASIS_LIB) -L${NETCDF_DIR}/lib -lnetcdff -L$(ICEBERG_MPI_LIB)
 
 %.o: %.F90
 	$(FC) $(ICEBERG_FFLAGS) -c $(ICEBERG_OASIS_INCLUDE) -I${NETCDF_DIR}/include $<
