@@ -7,7 +7,7 @@ program iceberg
     implicit none
 
     integer ::      RunLengthSec, TimeStepSec
-    integer ::      StartYear, StartMonth, StartDay
+    integer ::      StartYear, StartMonth, StartDay, FixYear
     namelist /NAMICEBERG/ RunLengthSec, TimeStepSec, StartYear, StartMonth, StartDay, FixYear, FileListSST, FileListSIC, LDebug, LInterpolate
 
     integer :: time
@@ -39,11 +39,11 @@ program iceberg
     ! and the last one is at runlength-timestep (see OASIS documentation)
     do time=0,RunLengthSec-TimeStepSec,TimeStepSec
 
-        call cplng_exchange(time,cplng_stage_rcv_oce)
+        call cplng_exchange(time,cplng_stage_rec)
 
         call update_position_melt
 
-       ! call cplng_exchange(time,cplng_stage_snd_oce)
+       ! call cplng_exchange(time,cplng_stage_snd)
 
     enddo
 

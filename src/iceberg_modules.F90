@@ -8,7 +8,7 @@ module iceberg_mod
     private
 
     public setup_iceberg
-    public update_sst_and_sic
+    public update_position_melt
     public finalise_iceberg
 
     real(RNP),pointer     :: iceberg_sst(:,:)
@@ -145,14 +145,14 @@ contains
                 if (LDebug) then
                     write(LOGLUN,'(A,3F8.1)') 'time interpolation t1,t,t2',t1,t,t2
                 endif
-                AMIP_sst=((t-t1)*sst(:,:,2)+(t2-t)*sst(:,:,1))/(t2-t1)
-                AMIP_sic=max(0.d0,min(1.d0,((t-t1)*sic(:,:,2)+(t2-t)*sic(:,:,1))/(t2-t1)))
+                iceberg_sst=((t-t1)*sst(:,:,2)+(t2-t)*sst(:,:,1))/(t2-t1)
+                iceberg_sic=max(0.d0,min(1.d0,((t-t1)*sic(:,:,2)+(t2-t)*sic(:,:,1))/(t2-t1)))
             else
                 if (LDebug) then
                     write(LOGLUN,'(A,3F8.1)') 'no time interpolation t,t2',t,t2
                 endif
-                AMIP_sst=sst(:,:,2)
-                AMIP_sic=max(0.d0,min(1.d0,sic(:,:,2)))
+                iceberg_sst=sst(:,:,2)
+                iceberg_sic=max(0.d0,min(1.d0,sic(:,:,2)))
             endif
         else
             ! nearest neighbour
@@ -168,11 +168,11 @@ contains
             if (LDebug) then
                 write(LOGLUN,'(A,I4,3F8.1)') 'nearest neigbour nn,t1,t,t2',nn,t1,t,t2
             endif
-            AMIP_sst=sst(:,:,nn)
-            AMIP_sic=max(0.d0,min(1.d0,sic(:,:,nn)))
+            iceberg_sst=sst(:,:,nn)
+            iceberg_sic=max(0.d0,min(1.d0,sic(:,:,nn)))
         endif
 
-    end subroutine update_sst_and_sic
+    end subroutine update_position_melt
 
 
     subroutine read_next_timestep_from_file
